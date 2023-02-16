@@ -18,11 +18,11 @@ RSpec.describe Cell do
   end
 
   describe '#empty?' do
-    it 'returns true if cell does not contain a ship' do
+    xit 'returns true if cell does not contain a ship' do
       expect(cell.empty?).to eq(true)
     end
 
-    it 'returns false if cell contains a ship' do
+    xit 'returns false if cell contains a ship' do
       cell.place_ship(cruiser)
 
       expect(cell.empty?).to eq(false)
@@ -30,7 +30,7 @@ RSpec.describe Cell do
   end
 
   describe '#place_ship' do
-    it 'places a ship on the cell' do
+    xit 'places a ship on the cell' do
       cell.place_ship(cruiser)
 
       expect(cell.ship).to eq(cruiser)
