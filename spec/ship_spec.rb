@@ -17,14 +17,14 @@ RSpec.describe Ship do
     end
   end
 
-  xdescribe "#sunk?" do
+  describe "#sunk?" do
 
     it "appears false if not sunk" do
       expect(cruiser.sunk?).to eq(false)
       expect(cruiser.health).to eq(3)
     end
 
-    it "appears true after sunk" do
+    xit "appears true after sunk" do
       3.times do cruiser.hit
       end
       expect(cruiser.health).to eq(0)
