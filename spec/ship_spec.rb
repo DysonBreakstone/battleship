@@ -16,7 +16,7 @@ RSpec.describe Ship do
     end
   end
 
-  describe "#sunk" do
+  describe "#sunk?" do
 
     it "appears false if not sunk" do
       expect(cruiser.sunk?).to eq(false)
@@ -27,6 +27,17 @@ RSpec.describe Ship do
       3.times do cruiser.hit
       expect(cruiser.health).to eq(0)
       expect(cruiser.sunk?).to eq(true)
+      end
+    end
+
+    describe "#hit" do
+      it "detracts from health attribute" do
+        cruiser.hit
+        expect(cruiser.health).to eq(2)
+        cruiser.hit
+        expect(cruiser.health).to eq(1)
+        cruiser.hit
+        expect(cruiser.health).to eq(0)
       end
     end
   end
