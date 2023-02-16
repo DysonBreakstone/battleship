@@ -36,4 +36,21 @@ RSpec.describe Cell do
       expect(cell.ship).to eq(cruiser)
     end
   end
+
+  describe '#fired_upon?' do
+
+    it 'returns false when #fire_upon method has not been called' do
+      cell.place_ship(cruiser)
+
+      expect(cell.fired_upon?).to eq(false)
+    end
+
+    it 'returns true when #fire_upon method has been called' do
+      cell.place_ship(cruiser)
+      cell.fire_upon
+
+      expect(cell.fired_upon?).to eq(true)
+    end
+
+  end
 end
