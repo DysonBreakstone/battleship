@@ -24,4 +24,8 @@ class Cell
       ship.hit
     end
   end
+
+  def fired_upon?
+    @fired_upon
+  end
 end
