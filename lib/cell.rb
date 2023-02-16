@@ -28,4 +28,28 @@ class Cell
   def fired_upon?
     @fired_upon
   end
+
+  def render(player = false)
+    if @ship
+      if @fired_upon
+        if @ship.sunk?
+          return "X"
+        else
+          return "H"
+        end
+      else
+        if player == true
+          return "S"
+        else
+          return "."
+        end
+      end
+    else
+      if @fired_upon
+        return "M"
+      else
+        return "."
+      end
+    end
+  end
 end
