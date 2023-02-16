@@ -3,7 +3,8 @@ require './lib/ship'
 
 RSpec.describe Cell do 
 
-  let(:cell) { Cell.new("B4") }
+  let(:cell_1) { Cell.new("B4") }
+  let(:cell_2) { Cell.new("C3") }
   let(:cruiser) { Ship.new("Cruiser", 3) }
 
   describe '#initialize' do
@@ -65,4 +66,25 @@ RSpec.describe Cell do
 
   end
 
+  describe '#render' do
+    it 'can render specific string representation of what has happened based on fired_upon' do
+      expect(cell_1.render).to eq('.')
+      
+      cell_1.fire_upon
+      expect(cell_1.render).to eq('M')
+      
+      cell_2.place_ship(cruiser)
+      expect(cell_2.render).to eq('.')
+      expect(cell_2.render(true)).to eq('S')
+
+      cell_2.fire_upon
+      expect(cell_2.render).to eq('H')
+      
+      2.times do cruiser.hit
+      end
+      expect(cell_2.render).to eq('X')
+      expect(cruiser.health).to eq(0)
+      expect(cruiser.sunk?).to eq(true)
+    end
   end
+end
