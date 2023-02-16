@@ -30,26 +30,17 @@ class Cell
   end
 
   def render(player = false)
-    if @ship
-      if @fired_upon
-        if @ship.sunk?
-          return "X"
-        else
-          return "H"
-        end
-      else
-        if player == true
+    def render(reveal_ship = false)
+      if reveal_ship == true && empty? == false && fired_upon? == false
           return "S"
-        else
+      elsif fired_upon? == true && empty? == true
+          return "M"
+      elsif fired_upon? == true && @ship != nil && @ship.sunk? == false
+          return "H"
+      elsif fired_upon? == true && empty? == false && @ship.sunk? == true
+          return "X"
+      else fired_upon? == false
           return "."
-        end
       end
-    else
-      if @fired_upon
-        return "M"
-      else
-        return "."
-      end
-    end
   end
 end
