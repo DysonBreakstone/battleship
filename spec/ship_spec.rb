@@ -24,7 +24,7 @@ RSpec.describe Ship do
       expect(cruiser.health).to eq(3)
     end
 
-    xit "appears true after sunk" do
+    it "appears true after sunk" do
       3.times do cruiser.hit
       end
       expect(cruiser.health).to eq(0)
@@ -32,7 +32,7 @@ RSpec.describe Ship do
     end
   end
 
-    xdescribe "#hit" do
+    describe "#hit" do
       it "detracts from health attribute" do
         cruiser.hit
         expect(cruiser.health).to eq(2)
