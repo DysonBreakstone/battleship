@@ -18,7 +18,7 @@ RSpec.describe Cell do
   end
 
   describe '#empty?' do
-    xit 'returns true if cell does not contain a ship' do
+    it 'returns true if cell does not contain a ship' do
       expect(cell.empty?).to eq(true)
     end
 

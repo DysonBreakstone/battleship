@@ -7,5 +7,8 @@ class Cell
     @ship = nil
   end
 
+  def empty?
+    @ship == nil
+  end
 
 end
