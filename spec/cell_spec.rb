@@ -38,7 +38,6 @@ RSpec.describe Cell do
   end
 
   describe '#fired_upon?' do
-
     it 'returns false when #fire_upon method has not been called' do
       cell.place_ship(cruiser)
 
@@ -51,6 +50,19 @@ RSpec.describe Cell do
 
       expect(cell.fired_upon?).to eq(true)
     end
+  end
+
+  describe 'fire_upon' do
+    it 'reduces health of ship' do
+      cell.place_ship(cruiser)
+      
+      expect(cruiser.health).to eq(3)
+      
+      cell.fire_upon
+
+      expect(cruiser.health).to eq(2)
+    end
 
   end
-end
+
+  end
