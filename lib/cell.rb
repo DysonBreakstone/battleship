@@ -29,8 +29,7 @@ class Cell
     @fired_upon
   end
 
-  def render(player = false)
-    def render(reveal_ship = false)
+  def render(reveal_ship = false)
       if reveal_ship == true && empty? == false && fired_upon? == false
           return "S"
       elsif fired_upon? == true && empty? == true
