@@ -26,4 +26,24 @@ class Board
   def valid_coordinate?(coordinate)
     @valid_coordinate.include?(@cells[coordinate]) && !@cells[coordinate].fired_upon
   end
+
+  def valid_placement?(ship_type, coordinates)
+    valid_number_array = (1..4).each_cons(coordinates.length)
+    valid_letter_array = ("A".."D").each_cons(coordinates.length)
+    numbers_array = []
+    letters_array = []
+    coordinates.each do |coordinate|
+      letters_array << coordinate.split("").first
+      numbers_array << coordinate.split("").last.to_i
+    end
+
+    if (valid_letter_array.include?(letters_array) ^ 
+        valid_number_array.include?(numbers_array)) &&
+        ship_type.length == coordinates.length
+      return true
+    else
+      return false
+    end
+  end
+
 end
