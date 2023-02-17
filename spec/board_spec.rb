@@ -13,7 +13,7 @@ RSpec.describe Board do
 
     it 'has attributes' do
       expect(board.cells.values).to all(be_a(Cell))
-      expect(board.valid_coordinate).to eq(board.cells.keys)
+      expect(board.valid_coordinate).to eq(board.cells.values)
     end
 
   end
