@@ -56,4 +56,40 @@ class Board
       end
     end
   end
+
+  def render(reveal_ship = false)
+    row_a = [
+    @cells.values[0].render(reveal_ship), 
+    @cells.values[1].render(reveal_ship), 
+    @cells.values[2].render(reveal_ship), 
+    @cells.values[3].render(reveal_ship)
+  ]
+
+    row_b = [
+    @cells.values[4].render(reveal_ship), 
+    @cells.values[5].render(reveal_ship), 
+    @cells.values[6].render(reveal_ship), 
+    @cells.values[7].render(reveal_ship)
+  ]
+
+    row_c = [
+    @cells.values[8].render(reveal_ship), 
+    @cells.values[9].render(reveal_ship), 
+    @cells.values[10].render(reveal_ship), 
+    @cells.values[11].render(reveal_ship)
+  ]
+
+    row_d = row_c = [
+    @cells.values[12].render(reveal_ship), 
+    @cells.values[13].render(reveal_ship), 
+    @cells.values[14].render(reveal_ship), 
+    @cells.values[15].render(reveal_ship)
+  ]
+
+    board_render = "  1 2 3 4 \n" +
+                  "A #{row_a.join(" ")} \n" +
+                  "B #{row_b.join(" ")} \n" +
+                  "C #{row_c.join(" ")} \n" +
+                  "D #{row_d.join(" ")} \n"        
+  end
 end
