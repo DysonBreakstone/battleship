@@ -69,11 +69,41 @@ RSpec.describe Board do
       cell_2 = board.cells["A2"]
       cell_3 = board.cells["A3"]
       board.place(cruiser, ["A1", "A2", "A3"])
-
       expect(cell_1.ship).to eq(cruiser)
       expect(cell_2.ship).to eq(cruiser)
       expect(cell_3.ship).to eq(cruiser)
       expect(cell_2.ship).to eq(cell_3.ship)
     end
   end
+  
+  desribe "#render" do
+    it "renders without optional argument" do
+      board.place(cruiser, ["A1", "A2", "A3"])
+      expect(board.render). to eq("  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n")
+    end
+
+    it "renders with optional argument" do
+      board.place(cruiser, ["A1", "A2", "A3"])
+      expect(board.render(true)).to eq("  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n")
+    end
+
+    it "renders different cell states" do
+      cell_1 = board.cells["A1"]
+      cell_2 = board.cells["A2"]
+      cell_3 = board.cells["A3"]
+      cell_4 = board.cells["A4"]
+      board.place(cruiser, ["A1", "A2", "A3"])
+      cell_1.fire_upon
+      cell_2.fire_upon
+      cell_4.fire_upon
+
+      expect(board.render(true)).to eq("  1 2 3 4 \nA H H S M \nB . . . . \nC . . . . \nD . . . . \n")
+      
+      cell_3.fire_upon
+
+      expect(board.render(true)).to eq("  1 2 3 4 \nA X X X M \nB . . . . \nC . . . . \nD . . . . \n")
+      expect(cruiser.health).to eq(0)
+    end
+  end
+
 end
