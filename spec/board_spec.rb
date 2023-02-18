@@ -69,7 +69,6 @@ RSpec.describe Board do
       cell_2 = board.cells["A2"]
       cell_3 = board.cells["A3"]
       board.place(cruiser, ["A1", "A2", "A3"])
-
       expect(cell_1.ship).to eq(cruiser)
       expect(cell_2.ship).to eq(cruiser)
       expect(cell_3.ship).to eq(cruiser)

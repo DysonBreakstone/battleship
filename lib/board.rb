@@ -32,14 +32,17 @@ class Board
     valid_letter_array = ("A".."D").each_cons(coordinates.length)
     numbers_array = []
     letters_array = []
+    all_empty = true
     coordinates.each do |coordinate|
+      all_empty = false if !@cells[coordinate].empty?
       letters_array << coordinate.split("").first
       numbers_array << coordinate.split("").last.to_i
     end
 
     if (valid_letter_array.include?(letters_array) ^ 
         valid_number_array.include?(numbers_array)) &&
-        ship_type.length == coordinates.length
+        ship_type.length == coordinates.length &&
+        all_empty == true
       return true
     else
       return false
@@ -47,8 +50,10 @@ class Board
   end
 
   def place(ship_type, coordinates)
-    coordinates.map do |coordinate|
-      @cells[coordinate].place_ship(ship_type) if valid_placement?(ship_type, coordinates)
+    if valid_placement?(ship_type, coordinates)
+      coordinates.each do |coordinate|
+        @cells[coordinate].place_ship(ship_type) 
+      end
     end
   end
 end
