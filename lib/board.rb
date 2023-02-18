@@ -46,4 +46,9 @@ class Board
     end
   end
 
+  def place(ship_type, coordinates)
+    coordinates.map do |coordinate|
+      @cells[coordinate].place_ship(ship_type) if valid_placement?(ship_type, coordinates)
+    end
+  end
 end
