@@ -38,7 +38,7 @@ class Cell
           return "H"
       elsif fired_upon? == true && empty? == false && @ship.sunk? == true
           return "X"
-      else fired_upon? == false
+      else fired_upon? == false && empty? == true
           return "."
       end
   end
