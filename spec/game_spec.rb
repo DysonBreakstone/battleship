@@ -16,6 +16,8 @@ RSpec.describe Game do
       expect(game.player_submarine).to be_a(Ship)
       expect(game.cpu_cruiser).to be_a(Ship)
       expect(game.cpu_submarine).to be_a(Ship)
+      expect(game.cpu_guess_pool).to be_a(Array)
+      expect(game.player_guess_pool).to be_a(Array)
     end
   end
 end

@@ -8,7 +8,9 @@ class Game
               :player_cruiser,
               :player_submarine,
               :cpu_cruiser,
-              :cpu_submarine
+              :cpu_submarine,
+              :cpu_guess_pool,
+              :player_guess_pool
 
   def initialize
     @cpu_board = Board.new
@@ -17,6 +19,8 @@ class Game
     @player_submarine = Ship.new("Submarine", 2)
     @cpu_cruiser = Ship.new("Cruiser", 3)
     @cpu_submarine = Ship.new("Submarine", 2)
+    @cpu_guess_pool = @player_board.cells.keys
+    @player_guess_pool = @cpu_board.cells.keys
   end
             
   def start
@@ -26,9 +30,9 @@ class Game
     place_player_cruiser
     place_player_submarine
     boards_display
-    
+# require 'pry'; binding.pry
     until winner? do
-      turn
+      turns
     end
   end
 
@@ -88,23 +92,30 @@ class Game
     
     coordinates
   end
-
+  
   def explanation
     puts "Hello welcome to Battleship!"
     sleep(1)
     puts "In this game you will try and guess where my ships are before I guess where yours are."
     sleep(1)
-    puts "Good luck.. now place your ships."
+    puts "Good luck.. now place your ships. As soon as your done with that I will start the game."
   end
 
   def winner?
     if @player_cruiser.sunk? && player_submarine.sunk? == true
       puts "I win! You suck!"
+      @cpu_guess_pool = @player_board.cells.keys
+      @player_guess_pool = @cpu_board.cells.keys
+      main_menu
     elsif @cpu_cruiser.sunk? && cpu_submarine.sunk? == true
       puts "I lose... you cheated."
+      @cpu_guess_pool = @player_board.cells.keys
+      @player_guess_pool = @cpu_board.cells.keys
+      main_menu
     else
       false
     end
+
   end
 
   def boards_display
@@ -114,16 +125,32 @@ class Game
     puts "-------player board-------"
     puts @player_board.render(true)
   end
+
+  def turns
+    cpu_shot = @player_board.cells.keys.sample(1)[0]
+    cpu_guess_pool.delete(cpu_shot)
+
+    @player_board.cells[cpu_shot].fire_upon
+    if @player_board.cells[cpu_shot].empty? == false && @player_board.cells[cpu_shot].ship.sunk? == true
+      puts "My shot on #{cpu_shot} was a hit and I sunk your #{@player_board.cells[cpu_shot].ship.name}!"
+    elsif @player_board.cells[cpu_shot].empty? == false 
+      puts "My shot on #{cpu_shot} was a hit!"
+    elsif @player_board.cells[cpu_shot].empty? == true 
+      puts "My shot on #{cpu_shot} was a miss!"
+    end
+    sleep(1)
+    boards_display
+    sleep(1)
+    puts "Now its your turn. Now choose a coordinate on the board example: #{@player_guess_pool.sample}"
+    player_shot = gets.chomp.upcase.to_s
+    @cpu_board.cells[player_shot].fire_upon
+    if @cpu_board.cells[player_shot].empty? == false && @cpu_board.cells[player_shot].ship.sunk? == true
+      puts "Your shot on #{player_shot} was a hit and you sunk my #{@cpu_board.cells[player_shot].ship.name}!"
+    elsif @cpu_board.cells[player_shot].empty? == false 
+      puts "Your shot on #{player_shot} was a hit!"
+    elsif @cpu_board.cells[player_shot].empty? == true 
+      puts "Your shot on #{player_shot} was a miss!"
+    end
+    boards_display
+  end
 end
-
-# main_menu 
-# start
-# winner
-# place_cpu_ships (computer places randomly, player uses inputs)
-# place_player_ships
-# turn (computer random, player by input)
-# explanation (tells rules of the game)
-# board_display
-
-# cpu takes shot, show result, display board, person  takes turn,
-# then display board, repeat until winner
