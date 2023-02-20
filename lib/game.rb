@@ -4,7 +4,11 @@ require './spec/spec_helper'
 class Game
 
   attr_reader :player_board,
-              :cpu_board
+              :cpu_board,
+              :player_cruiser,
+              :player_submarine,
+              :cpu_cruiser,
+              :cpu_submarine
 
   def initialize
     @cpu_board = Board.new
@@ -18,12 +22,11 @@ class Game
   def start
     main_menu
     place_cpu_ships
-    # explanation
+    explanation
     place_player_cruiser
     place_player_submarine
     puts @player_board.render(true)
     require 'pry'; binding.pry
-
 
     until winner do
       board_display
@@ -86,6 +89,14 @@ class Game
     end
     
     coordinates
+  end
+
+  def explanation
+    puts "Hello welcome to Battleship!"
+    sleep(1)
+    puts "In this game you will try and guess where my ships are before I guess where yours are."
+    sleep(1)
+    puts "Good luck.. now place your ships."
   end
 
 end
