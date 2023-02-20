@@ -20,6 +20,7 @@ class Board
               "D3" => Cell.new("D3"), 
               "D4" => Cell.new("D4") 
               }
+    $cells = @cells
     @valid_coordinate = @cells.values      
   end
 
@@ -38,15 +39,18 @@ class Board
       letters_array << coordinate.split("").first
       numbers_array << coordinate.split("").last.to_i
     end
-
-    if (valid_letter_array.include?(letters_array) ^ 
+   
+    if ((valid_letter_array.include?(letters_array) ^ 
         valid_number_array.include?(numbers_array)) &&
+       (letters_array.uniq.length == 1 ||
+        numbers_array.uniq.length == 1) &&
         ship_type.length == coordinates.length &&
-        all_empty == true
+        all_empty == true)
       return true
     else
       return false
     end
+
   end
 
   def place(ship_type, coordinates)
@@ -79,7 +83,7 @@ class Board
     @cells.values[11].render(reveal_ship)
   ]
 
-    row_d = row_c = [
+    row_d = [
     @cells.values[12].render(reveal_ship), 
     @cells.values[13].render(reveal_ship), 
     @cells.values[14].render(reveal_ship), 

@@ -32,6 +32,8 @@ RSpec.describe Board do
 
   describe '#valid_placement?' do
     it 'checks that the coordinates in the array are the same length' do
+      expect(board.valid_placement?(cruiser, ["A1", "A2", "A3"])).to be(true)
+      # require 'pry'; binding.pry
       expect(board.valid_placement?(cruiser, ["A1", "A2"])).to be(false)
       expect(board.valid_placement?(submarine, ["A2", "A3", "A4"])).to be(false)
     end
