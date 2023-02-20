@@ -18,8 +18,12 @@ class Game
   def start
     main_menu
     place_cpu_ships
-    explanation
-    place_player_ships
+    # explanation
+    place_player_cruiser
+    place_player_submarine
+    puts @player_board.render(true)
+    require 'pry'; binding.pry
+
 
     until winner do
       board_display
@@ -46,9 +50,32 @@ class Game
   end
 
   def place_cpu_ships
-    puts cpu_board.place(@cpu_cruiser, (randomize_ship_placement(@cpu_cruiser)))
-    puts cpu_board.place(@cpu_submarine, (randomize_ship_placement(@cpu_submarine)))
-    puts cpu_board.render(true)
+    cpu_board.place(@cpu_cruiser, (randomize_ship_placement(@cpu_cruiser)))
+    cpu_board.place(@cpu_submarine, (randomize_ship_placement(@cpu_submarine)))
+  end
+
+  def place_player_cruiser
+    puts "Enter your Cruiser coordinates: example: A1 A2 A3"
+    cr_coordinates = gets.chomp.upcase.split(" ")
+    
+    if @player_board.valid_placement?(@player_cruiser, cr_coordinates) == true
+      @player_board.place(@player_cruiser, cr_coordinates)
+    else
+      puts "I'm sorry, those are not valid coordinates. Try again!"
+      place_player_cruiser
+    end
+  end
+
+  def place_player_submarine
+    puts "Enter your Submarine coordinates: example: B1 C1"
+    sb_coordinates = gets.chomp.upcase.split(" ")
+
+    if @player_board.valid_placement?(@player_submarine, sb_coordinates) == true
+      @player_board.place(@player_submarine, sb_coordinates)
+    else
+      puts "I'm sorry, those are not valid coordinates. Try again!"
+      place_player_submarine
+    end
   end
 
   def randomize_ship_placement(ship)
