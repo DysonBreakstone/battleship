@@ -1,5 +1,7 @@
-require 'spec/spec_helper'
+require './spec/spec_helper'
 
 game = Game.new
 
-game.start
+# game.main_menu
+
+game.randomize

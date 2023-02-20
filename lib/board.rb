@@ -28,6 +28,7 @@ class Board
   end
 
   def valid_placement?(ship_type, coordinates)
+    # require 'pry'; binding.pry
     valid_number_array = (1..4).each_cons(coordinates.length)
     valid_letter_array = ("A".."D").each_cons(coordinates.length)
     numbers_array = []
@@ -38,15 +39,18 @@ class Board
       letters_array << coordinate.split("").first
       numbers_array << coordinate.split("").last.to_i
     end
-
-    if (valid_letter_array.include?(letters_array) ^ 
+    # require 'pry'; binding.pry
+    if ((valid_letter_array.include?(letters_array) ^ 
         valid_number_array.include?(numbers_array)) &&
+       ((letters_array[0] == letters_array[1]) && (letters_array [1] == letters_array[2]) ||
+        (numbers_array[0] == numbers_array[1]) && (numbers_array[1] == numbers_array[2])) &&
         ship_type.length == coordinates.length &&
-        all_empty == true
+        all_empty == true)
       return true
     else
       return false
     end
+    # require 'pry'; binding.pry
   end
 
   def place(ship_type, coordinates)
