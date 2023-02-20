@@ -25,11 +25,9 @@ class Game
     explanation
     place_player_cruiser
     place_player_submarine
-    puts @player_board.render(true)
-    require 'pry'; binding.pry
-
+    boards_display
+    
     until winner? do
-      board_display
       turn
     end
   end
@@ -108,6 +106,14 @@ class Game
       false
     end
   end
+
+  def boards_display
+    puts "--------cpu board---------"
+    puts @cpu_board.render
+    puts "--------------------------"
+    puts "-------player board-------"
+    puts @player_board.render(true)
+  end
 end
 
 # main_menu 
@@ -118,3 +124,6 @@ end
 # turn (computer random, player by input)
 # explanation (tells rules of the game)
 # board_display
+
+# cpu takes shot, show result, display board, person  takes turn,
+# then display board, repeat until winner
