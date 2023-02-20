@@ -28,7 +28,7 @@ class Game
     puts @player_board.render(true)
     require 'pry'; binding.pry
 
-    until winner do
+    until winner? do
       board_display
       turn
     end
@@ -99,6 +99,15 @@ class Game
     puts "Good luck.. now place your ships."
   end
 
+  def winner?
+    if @player_cruiser.sunk? && player_submarine.sunk? == true
+      puts "I win! You suck!"
+    elsif @cpu_cruiser.sunk? && cpu_submarine.sunk? == true
+      puts "I lose... you cheated."
+    else
+      false
+    end
+  end
 end
 
 # main_menu 
