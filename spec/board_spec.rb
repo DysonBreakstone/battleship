@@ -76,7 +76,7 @@ RSpec.describe Board do
     end
   end
   
-  desribe "#render" do
+  describe "#render" do
     it "renders without optional argument" do
       board.place(cruiser, ["A1", "A2", "A3"])
       expect(board.render). to eq("  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n")
