@@ -38,7 +38,9 @@ class Game
   end
 
   def main_menu
+    system("clear")
     puts "Welcome to BATTLESHIP"
+    puts " "
     puts "Enter p to play. Enter q to quit."
     
     player_input = gets.chomp.to_s.downcase
@@ -63,9 +65,10 @@ class Game
   def place_player_cruiser
     puts "Enter your Cruiser coordinates: example: A1 A2 A3"
     cr_coordinates = gets.chomp.upcase.split(" ")
-    
-    if @player_board.valid_placement?(@player_cruiser, cr_coordinates) == true
-      @player_board.place(@player_cruiser, cr_coordinates)
+
+    if (cr_coordinates & @player_board.cells.keys) == cr_coordinates &&
+        @player_board.valid_placement?(@player_cruiser, cr_coordinates) == true 
+          @player_board.place(@player_cruiser, cr_coordinates)
     else
       puts "I'm sorry, those are not valid coordinates. Try again!"
       place_player_cruiser
@@ -76,8 +79,9 @@ class Game
     puts "Enter your Submarine coordinates: example: B1 C1"
     sb_coordinates = gets.chomp.upcase.split(" ")
 
-    if @player_board.valid_placement?(@player_submarine, sb_coordinates) == true
-      @player_board.place(@player_submarine, sb_coordinates)
+    if (sb_coordinates & @player_board.cells.keys) == sb_coordinates &&
+        @player_board.valid_placement?(@player_submarine, sb_coordinates) == true
+          @player_board.place(@player_submarine, sb_coordinates)
     else
       puts "I'm sorry, those are not valid coordinates. Try again!"
       place_player_submarine
@@ -95,11 +99,15 @@ class Game
   end
   
   def explanation
+    puts " "
     puts "Hello welcome to Battleship!"
-    sleep(1)
+    puts " "
+    sleep(1.5)
     puts "In this game you will try and guess where my ships are before I guess where yours are."
-    sleep(1)
-    puts "Good luck.. now place your ships. As soon as your done with that I will start the game."
+    puts " "
+    sleep(1.5)
+    puts "Good luck.. now place your ships. As soon as you're done with that I will start the game."
+    puts " "
   end
 
   def winner?
@@ -120,39 +128,58 @@ class Game
   end
 
   def boards_display
+    puts " "
+    puts "^^^^^^^^^^^^^^^^^^^^^^^^^^"
     puts "--------cpu board---------"
     puts @cpu_board.render
     puts "--------------------------"
     puts "-------player board-------"
     puts @player_board.render(true)
+    puts "^^^^^^^^^^^^^^^^^^^^^^^^^^"
+    puts "//////////////////////////"
+    puts " "
   end
 
   def turns
     cpu_shot = @player_board.cells.keys.sample(1)[0]
     cpu_guess_pool.delete(cpu_shot)
 
-    @player_board.cells[cpu_shot].fire_upon
-    if @player_board.cells[cpu_shot].empty? == false && @player_board.cells[cpu_shot].ship.sunk? == true
-      puts "My shot on #{cpu_shot} was a hit and I sunk your #{@player_board.cells[cpu_shot].ship.name}!"
-    elsif @player_board.cells[cpu_shot].empty? == false 
-      puts "My shot on #{cpu_shot} was a hit!"
-    elsif @player_board.cells[cpu_shot].empty? == true 
-      puts "My shot on #{cpu_shot} was a miss!"
-    end
+    cpu_move(cpu_shot)
+   
     sleep(1)
+
     boards_display
+
     sleep(1)
+
     puts "Now its your turn. Now choose a coordinate on the board example: #{@player_guess_pool.sample}"
+
     player_shot = gets.chomp.upcase.to_s
-    @cpu_board.cells[player_shot].fire_upon
-    if @cpu_board.cells[player_shot].empty? == false && @cpu_board.cells[player_shot].ship.sunk? == true
-      puts "Your shot on #{player_shot} was a hit and you sunk my #{@cpu_board.cells[player_shot].ship.name}!"
-    elsif @cpu_board.cells[player_shot].empty? == false 
-      puts "Your shot on #{player_shot} was a hit!"
-    elsif @cpu_board.cells[player_shot].empty? == true 
-      puts "Your shot on #{player_shot} was a miss!"
+    player_move(player_shot)
+
+    boards_display
+  end
+
+  def player_move(shot)
+    @cpu_board.cells[shot].fire_upon
+    if @cpu_board.cells[shot].empty? == false && @cpu_board.cells[shot].ship.sunk? == true
+      puts "Your shot on #{shot} was a hit and you sunk my #{@cpu_board.cells[shot].ship.name}!"
+    elsif @cpu_board.cells[shot].empty? == false 
+      puts "Your shot on #{shot} was a hit!"
+    elsif @cpu_board.cells[shot].empty? == true 
+      puts "Your shot on #{shot} was a miss!"
     end
     sleep(2)
-    boards_display
+  end
+
+  def cpu_move(shot)
+    @player_board.cells[shot].fire_upon
+    if @player_board.cells[shot].empty? == false && @player_board.cells[shot].ship.sunk? == true
+      puts "My shot on #{shot} was a hit and I sunk your #{@player_board.cells[shot].ship.name}!"
+    elsif @player_board.cells[shot].empty? == false 
+      puts "My shot on #{shot} was a hit!"
+    elsif @player_board.cells[shot].empty? == true 
+      puts "My shot on #{shot} was a miss!"
+    end
   end
 end
