@@ -142,7 +142,7 @@ class Game
 
   def turns
     cpu_shot = @player_board.cells.keys.sample(1)[0]
-    cpu_guess_pool.delete(cpu_shot)
+    @cpu_guess_pool.delete(cpu_shot)
 
     cpu_move(cpu_shot)
    
@@ -161,15 +161,23 @@ class Game
   end
 
   def player_move(shot)
-    @cpu_board.cells[shot].fire_upon
-    if @cpu_board.cells[shot].empty? == false && @cpu_board.cells[shot].ship.sunk? == true
-      puts "Your shot on #{shot} was a hit and you sunk my #{@cpu_board.cells[shot].ship.name}!"
-    elsif @cpu_board.cells[shot].empty? == false 
-      puts "Your shot on #{shot} was a hit!"
-    elsif @cpu_board.cells[shot].empty? == true 
-      puts "Your shot on #{shot} was a miss!"
+    # require 'pry'; binding.pry
+    if @player_guess_pool.include?(shot)
+      @cpu_board.cells[shot].fire_upon
+      if @cpu_board.cells[shot].empty? == false && @cpu_board.cells[shot].ship.sunk? == true
+        puts "Your shot on #{shot} was a hit and you sunk my #{@cpu_board.cells[shot].ship.name}!"
+      elsif @cpu_board.cells[shot].empty? == false 
+        puts "Your shot on #{shot} was a hit!"
+      elsif @cpu_board.cells[shot].empty? == true 
+        puts "Your shot on #{shot} was a miss!"
+      end
+      sleep(2)
+      @player_guess_pool.delete(shot)
+    else
+      p "I'm sorry, that's not a valid move. Try again!"
+      shot = gets.chomp.to_s.upcase
+      player_move(shot)
     end
-    sleep(2)
   end
 
   def cpu_move(shot)
