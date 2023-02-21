@@ -30,7 +30,8 @@ class Game
     place_player_cruiser
     place_player_submarine
     boards_display
-# require 'pry'; binding.pry
+    sleep (2)
+    
     until winner? do
       turns
     end
@@ -151,6 +152,7 @@ class Game
     elsif @cpu_board.cells[player_shot].empty? == true 
       puts "Your shot on #{player_shot} was a miss!"
     end
+    sleep(2)
     boards_display
   end
 end
