@@ -38,7 +38,9 @@ class Game
   end
 
   def main_menu
+    system("clear")
     puts "Welcome to BATTLESHIP"
+    puts " "
     puts "Enter p to play. Enter q to quit."
     
     player_input = gets.chomp.to_s.downcase
@@ -97,11 +99,15 @@ class Game
   end
   
   def explanation
+    puts " "
     puts "Hello welcome to Battleship!"
+    puts " "
     sleep(1.5)
     puts "In this game you will try and guess where my ships are before I guess where yours are."
+    puts " "
     sleep(1.5)
     puts "Good luck.. now place your ships. As soon as you're done with that I will start the game."
+    puts " "
   end
 
   def winner?
@@ -122,11 +128,16 @@ class Game
   end
 
   def boards_display
+    puts " "
+    puts "^^^^^^^^^^^^^^^^^^^^^^^^^^"
     puts "--------cpu board---------"
     puts @cpu_board.render
     puts "--------------------------"
     puts "-------player board-------"
     puts @player_board.render(true)
+    puts "^^^^^^^^^^^^^^^^^^^^^^^^^^"
+    puts "//////////////////////////"
+    puts " "
   end
 
   def turns
