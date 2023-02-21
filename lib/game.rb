@@ -63,9 +63,10 @@ class Game
   def place_player_cruiser
     puts "Enter your Cruiser coordinates: example: A1 A2 A3"
     cr_coordinates = gets.chomp.upcase.split(" ")
-    
-    if @player_board.valid_placement?(@player_cruiser, cr_coordinates) == true
-      @player_board.place(@player_cruiser, cr_coordinates)
+
+    if (cr_coordinates & @player_board.cells.keys) == cr_coordinates &&
+        @player_board.valid_placement?(@player_cruiser, cr_coordinates) == true 
+          @player_board.place(@player_cruiser, cr_coordinates)
     else
       puts "I'm sorry, those are not valid coordinates. Try again!"
       place_player_cruiser
@@ -76,8 +77,9 @@ class Game
     puts "Enter your Submarine coordinates: example: B1 C1"
     sb_coordinates = gets.chomp.upcase.split(" ")
 
-    if @player_board.valid_placement?(@player_submarine, sb_coordinates) == true
-      @player_board.place(@player_submarine, sb_coordinates)
+    if (sb_coordinates & @player_board.cells.keys) == sb_coordinates &&
+        @player_board.valid_placement?(@player_submarine, sb_coordinates) == true
+          @player_board.place(@player_submarine, sb_coordinates)
     else
       puts "I'm sorry, those are not valid coordinates. Try again!"
       place_player_submarine
@@ -96,10 +98,10 @@ class Game
   
   def explanation
     puts "Hello welcome to Battleship!"
-    sleep(1)
+    sleep(1.5)
     puts "In this game you will try and guess where my ships are before I guess where yours are."
-    sleep(1)
-    puts "Good luck.. now place your ships. As soon as your done with that I will start the game."
+    sleep(1.5)
+    puts "Good luck.. now place your ships. As soon as you're done with that I will start the game."
   end
 
   def winner?
