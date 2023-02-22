@@ -202,10 +202,10 @@ class Game
       cpu_shot = @player_board.cells.keys.sample(1)[0]
       @last_cpu_shot = cpu_shot
     elsif @player_board.cells[@last_cpu_shot].render == "M"
-      cpu_shot = @cpu_guess_pool.cells.keys.sample(1)[0]
+      cpu_shot = @cpu_guess_pool.sample(1)[0]
       @last_cpu_shot = cpu_shot
     elsif @player_board.cells[@last_cpu_shot].render == "X"
-      cpu_shot = @cpu_guess_pool.cells.keys.sample(1)[0]
+      cpu_shot = @cpu_guess_pool.sample(1)[0]
       @last_cpu_shot = cpu_shot
     elsif @player_board.cells[@last_cpu_shot].render == "H"    
       this_letter = @last_cpu_shot.split("").first
@@ -220,7 +220,7 @@ class Game
         next_moves << this_letter + number
       end
       cpu_shot = next_moves.select{|coordinate| @cpu_guess_pool.include?(coordinate)}.sample(1)[0]
-      if @player_board.cells.keys.include?(cpu_shot) && @player_board.cells[cpu_shot].render == "S"
+      if @cpu_guess_pool.include?(cpu_shot) && !@player_board.cells[cpu_shot].empty?
          @last_cpu_shot = cpu_shot
       end
     return cpu_shot
