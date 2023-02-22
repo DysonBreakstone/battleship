@@ -113,18 +113,13 @@ class Game
   def winner?
     if @player_cruiser.sunk? && player_submarine.sunk? == true
       puts "I win! You suck!"
-      @cpu_guess_pool = @player_board.cells.keys
-      @player_guess_pool = @cpu_board.cells.keys
-      main_menu
+      Game.new.start
     elsif @cpu_cruiser.sunk? && cpu_submarine.sunk? == true
       puts "I lose... you cheated."
-      @cpu_guess_pool = @player_board.cells.keys
-      @player_guess_pool = @cpu_board.cells.keys
-      main_menu
+      Game.new.start
     else
       false
     end
-
   end
 
   def boards_display
@@ -161,7 +156,6 @@ class Game
   end
 
   def player_move(shot)
-    # require 'pry'; binding.pry
     if @player_guess_pool.include?(shot)
       @cpu_board.cells[shot].fire_upon
       if @cpu_board.cells[shot].empty? == false && @cpu_board.cells[shot].ship.sunk? == true
