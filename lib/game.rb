@@ -21,6 +21,7 @@ class Game
     @cpu_submarine = Ship.new("Submarine", 2)
     @cpu_guess_pool = @player_board.cells.keys
     @player_guess_pool = @cpu_board.cells.keys
+    @last_cpu_shot = nil
   end
             
   def start
@@ -38,7 +39,6 @@ class Game
   end
 
   def main_menu
-    system("clear")
     puts "Welcome to BATTLESHIP"
     puts " "
     puts "Enter p to play. Enter q to quit."
@@ -136,25 +136,23 @@ class Game
   end
 
   def turns
-    cpu_shot = @player_board.cells.keys.sample(1)[0]
-    @cpu_guess_pool.delete(cpu_shot)
-
-    cpu_move(cpu_shot)
-   
+    
+    cpu_move(cpu_select_shot)
+    
     sleep(1)
-
+    
     boards_display
-
+    
     sleep(1)
-
+    
     puts "Now its your turn. Now choose a coordinate on the board example: #{@player_guess_pool.sample}"
-
+    
     player_shot = gets.chomp.upcase.to_s
     player_move(player_shot)
-
+    
     boards_display
   end
-
+  
   def player_move(shot)
     if @player_guess_pool.include?(shot)
       @cpu_board.cells[shot].fire_upon
@@ -173,7 +171,7 @@ class Game
       player_move(shot)
     end
   end
-
+  
   def cpu_move(shot)
     @player_board.cells[shot].fire_upon
     if @player_board.cells[shot].empty? == false && @player_board.cells[shot].ship.sunk? == true
@@ -182,6 +180,51 @@ class Game
       puts "My shot on #{shot} was a hit!"
     elsif @player_board.cells[shot].empty? == true 
       puts "My shot on #{shot} was a miss!"
+    end
+    
+    @cpu_guess_pool.delete(shot)
+  end
+  
+  def cpu_select_shot
+    alphabet = @player_board.cells.keys.map{|cell_name| cell_name.split("").first}.uniq
+    alphabet.prepend("0")
+    alphabet.append("0")
+
+    if @last_cpu_shot == nil
+      cpu_shot = @player_board.cells.keys.sample(1)[0]
+      @last_cpu_shot = cpu_shot
+    elsif @player_board.cells[@last_cpu_shot].render == "M"
+      cpu_shot = @cpu_guess_pool.sample(1)[0]
+      @last_cpu_shot = cpu_shot
+    elsif @player_board.cells[@last_cpu_shot].render == "X"
+      cpu_shot = @cpu_guess_pool.sample(1)[0]
+      @last_cpu_shot = cpu_shot
+    elsif @player_board.cells[@last_cpu_shot].render == "H"    
+      this_letter = @last_cpu_shot.split("").first
+      this_number = @last_cpu_shot.split("").last
+      next_letters = [alphabet[alphabet.index(this_letter)-1], alphabet[alphabet.index(this_letter)+1]]
+      next_numbers = [(this_number.to_i - 1).to_s, (this_number.to_i + 1).to_s]
+      next_moves = []
+      next_letters.each do |letter|
+        next_moves << letter + this_number
+      end
+      next_numbers.each do |number|
+        next_moves << this_letter + number
+      end
+      if next_moves.select{|move| @cpu_guess_pool.include?(move)}.empty?
+        cpu_shot = @cpu_guess_pool.sample(1)[0]
+        @last_cpu_shot = cpu_shot
+      else
+      
+        cpu_shot = next_moves.select{|coordinate| @cpu_guess_pool.include?(coordinate)}.sample(1)[0]
+        
+        if @cpu_guess_pool.include?(cpu_shot) && !@player_board.cells[cpu_shot].empty?
+          require 'pry'; binding.pry
+          @last_cpu_shot = cpu_shot
+
+        end
+      end
+    return cpu_shot
     end
   end
 end
