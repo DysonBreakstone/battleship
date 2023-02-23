@@ -22,6 +22,7 @@ class Game
     @cpu_guess_pool = @player_board.cells.keys
     @player_guess_pool = @cpu_board.cells.keys
     @last_cpu_shot = nil
+    @first_hit = nil
   end
             
   def start
@@ -31,8 +32,7 @@ class Game
     place_player_cruiser
     place_player_submarine
     boards_display
-    sleep (2)
-    
+    sleep (2) 
     until winner? do
       turns
     end
@@ -42,11 +42,8 @@ class Game
     puts "Welcome to BATTLESHIP"
     puts " "
     puts "Enter p to play. Enter q to quit."
-    
     player_input = gets.chomp.to_s.downcase
-
-    if player_input == "p"
-      
+    if player_input == "p"     
     elsif player_input == "q"
       puts "Coward."
       exit
@@ -65,7 +62,6 @@ class Game
   def place_player_cruiser
     puts "Enter your Cruiser coordinates: example: A1 A2 A3"
     cr_coordinates = gets.chomp.upcase.split(" ")
-
     if (cr_coordinates & @player_board.cells.keys) == cr_coordinates &&
         @player_board.valid_placement?(@player_cruiser, cr_coordinates) == true 
           @player_board.place(@player_cruiser, cr_coordinates)
@@ -90,11 +86,9 @@ class Game
 
   def randomize_ship_placement(ship)
     coordinates = @cpu_board.cells.keys.sample(ship.length)
-
     while @cpu_board.valid_placement?(ship, coordinates) == false
       coordinates = @cpu_board.cells.keys.sample(ship.length)
     end
-    
     coordinates
   end
   
@@ -111,10 +105,10 @@ class Game
   end
 
   def winner?
-    if @player_cruiser.sunk? && player_submarine.sunk? == true
+    if @player_cruiser.sunk? && @player_submarine.sunk? == true
       puts "I win! You suck!"
       Game.new.start
-    elsif @cpu_cruiser.sunk? && cpu_submarine.sunk? == true
+    elsif @cpu_cruiser.sunk? && @cpu_submarine.sunk? == true
       puts "I lose... you cheated."
       Game.new.start
     else
@@ -135,22 +129,17 @@ class Game
     puts " "
   end
 
-  def turns
-    
-    cpu_move(cpu_select_shot)
-    
+  def turns   
+    cpu_move(cpu_select_shot)    
+    sleep(1)  
+    boards_display  
     sleep(1)
-    
-    boards_display
-    
-    sleep(1)
-    
-    puts "Now its your turn. Now choose a coordinate on the board example: #{@player_guess_pool.sample}"
-    
-    player_shot = gets.chomp.upcase.to_s
-    player_move(player_shot)
-    
-    boards_display
+    if !(@player_cruiser.sunk? && @player_submarine.sunk?)
+      puts "Now its your turn. Now choose a coordinate on the board example: #{@player_guess_pool.sample}"
+      player_shot = gets.chomp.upcase.to_s
+      player_move(player_shot)  
+      boards_display
+    end
   end
   
   def player_move(shot)
@@ -181,7 +170,6 @@ class Game
     elsif @player_board.cells[shot].empty? == true 
       puts "My shot on #{shot} was a miss!"
     end
-    
     @cpu_guess_pool.delete(shot)
   end
   
@@ -199,7 +187,12 @@ class Game
     elsif @player_board.cells[@last_cpu_shot].render == "X"
       cpu_shot = @cpu_guess_pool.sample(1)[0]
       @last_cpu_shot = cpu_shot
-    elsif @player_board.cells[@last_cpu_shot].render == "H"    
+      first_hit = nil
+      return cpu_shot
+    elsif @player_board.cells[@last_cpu_shot].render == "H"
+      if @player_board.cells[@last_cpu_shot.upcase].ship.health >= 2
+        @first_hit = @last_cpu_shot
+      end
       this_letter = @last_cpu_shot.split("").first
       this_number = @last_cpu_shot.split("").last
       next_letters = [alphabet[alphabet.index(this_letter)-1], alphabet[alphabet.index(this_letter)+1]]
@@ -212,16 +205,12 @@ class Game
         next_moves << this_letter + number
       end
       if next_moves.select{|move| @cpu_guess_pool.include?(move)}.empty?
-        cpu_shot = @cpu_guess_pool.sample(1)[0]
-        @last_cpu_shot = cpu_shot
+        @last_cpu_shot = @first_hit
+        cpu_shot = cpu_select_shot
       else
-      
-        cpu_shot = next_moves.select{|coordinate| @cpu_guess_pool.include?(coordinate)}.sample(1)[0]
-        
+        cpu_shot = next_moves.select{|coordinate| @cpu_guess_pool.include?(coordinate)}.sample(1)[0] 
         if @cpu_guess_pool.include?(cpu_shot) && !@player_board.cells[cpu_shot].empty?
-          require 'pry'; binding.pry
           @last_cpu_shot = cpu_shot
-
         end
       end
     return cpu_shot
