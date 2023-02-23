@@ -39,7 +39,6 @@ class Game
   end
 
   def main_menu
-    system("clear")
     puts "Welcome to BATTLESHIP"
     puts " "
     puts "Enter p to play. Enter q to quit."
@@ -114,16 +113,10 @@ class Game
   def winner?
     if @player_cruiser.sunk? && player_submarine.sunk? == true
       puts "I win! You suck!"
-      @cpu_guess_pool = @player_board.cells.keys
-      @player_guess_pool = @cpu_board.cells.keys
-      @last_cpu_shot = nil
-      main_menu
+      Game.new.start
     elsif @cpu_cruiser.sunk? && cpu_submarine.sunk? == true
       puts "I lose... you cheated."
-      @cpu_guess_pool = @player_board.cells.keys
-      @player_guess_pool = @cpu_board.cells.keys
-      @last_cpu_shot = nil
-      main_menu
+      Game.new.start
     else
       false
     end
@@ -219,9 +212,18 @@ class Game
       next_numbers.each do |number|
         next_moves << this_letter + number
       end
-      cpu_shot = next_moves.select{|coordinate| @cpu_guess_pool.include?(coordinate)}.sample(1)[0]
-      if @cpu_guess_pool.include?(cpu_shot) && !@player_board.cells[cpu_shot].empty?
-         @last_cpu_shot = cpu_shot
+      if next_moves.select{|move| @cpu_guess_pool.include?(move)}.empty?
+        cpu_shot = @cpu_guess_pool.sample(1)[0]
+        @last_cpu_shot = cpu_shot
+      else
+      
+        cpu_shot = next_moves.select{|coordinate| @cpu_guess_pool.include?(coordinate)}.sample(1)[0]
+        
+        if @cpu_guess_pool.include?(cpu_shot) && !@player_board.cells[cpu_shot].empty?
+          require 'pry'; binding.pry
+          @last_cpu_shot = cpu_shot
+
+        end
       end
     return cpu_shot
     end
